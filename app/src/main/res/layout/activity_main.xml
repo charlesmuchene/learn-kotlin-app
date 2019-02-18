@@ -9,11 +9,39 @@
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
+            tools:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="0dp"
             android:layout_height="0dp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/loadingAnimationView"
+            android:layout_width="@android:dimen/thumbnail_width"
+            android:layout_height="@android:dimen/thumbnail_height"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/waitAnimationView"
+            android:layout_width="@android:dimen/thumbnail_width"
+            android:layout_height="@android:dimen/thumbnail_height"
+            app:lottie_fileName="wait.json"
+            app:lottie_loop="true"
+            tools:visibility="visible"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

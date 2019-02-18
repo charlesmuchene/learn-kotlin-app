@@ -1,30 +1,33 @@
 package com.charlesmuchene.kotlin.learn.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.charlesmuchene.kotlin.learn.R
-import com.charlesmuchene.kotlin.learn.utilities.Configuration
+import com.charlesmuchene.kotlin.learn.business.CountryViewModel
+import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.INTERNET_PERMISSION_REQUEST_CODE
 import com.charlesmuchene.kotlin.learn.utilities.permissions
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private val disposeBag = CompositeDisposable()
+    private lateinit var viewModel: CountryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
         internetPermissionGranted()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        disposeBag.dispose()
+        viewModel.cleanUp()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -32,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
+    /**
+     * Method invoked when internet permission is granted
+     */
     @AfterPermissionGranted(INTERNET_PERMISSION_REQUEST_CODE)
     private fun internetPermissionGranted() {
         if (EasyPermissions.hasPermissions(this, *permissions)) fetchCountries()
@@ -43,15 +49,50 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Fetch countries
+     */
     private fun fetchCountries() {
-        val subscribe = Configuration.apiService.getAllCountries()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response ->
-                if (response.isSuccessful)
-                    response.body()?.forEach { Timber.e(it.name) }
-                else Timber.e("Nothing came through")
-            }
 
-        disposeBag.add(subscribe)
+        viewModel.fetchAllCountries()
+
+        viewModel.countryFailure.observe(this, Observer { failure ->
+            Timber.e(failure.throwable)
+            showErrorLoadingCountries()
+        })
+
+        viewModel.countrySuccess.observe(this, Observer { success ->
+            displayCountries(success.data)
+        })
     }
+
+    /**
+     * Display the given countries
+     *
+     * @param countries [List]
+     */
+    private fun displayCountries(countries: List<Country>) {
+        // Process elements
+        for (country in countries) {
+            Timber.e(country.capital)
+        }
+        recyclerView.show()
+        hideLoadingBar()
+    }
+
+    /**
+     * Show error loading countries
+     */
+    private fun showErrorLoadingCountries() {
+        hideLoadingBar()
+        waitAnimationView.show()
+    }
+
+    /**
+     * Hide loading bar
+     */
+    private fun hideLoadingBar() {
+        loadingAnimationView.hide()
+    }
+
 }

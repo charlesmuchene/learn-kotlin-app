@@ -37,6 +37,8 @@ dependencies {
     implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.7.1'
     implementation group: 'io.reactivex.rxjava2', name: 'rxandroid', version: '2.1.1'
     implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation group: 'com.airbnb.android', name: 'lottie', version: '3.0.0-beta1'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'

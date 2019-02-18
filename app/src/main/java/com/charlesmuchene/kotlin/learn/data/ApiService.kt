@@ -5,6 +5,9 @@ import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
 
+/**
+ * Api service
+ */
 interface ApiService {
 
     @GET("all")
