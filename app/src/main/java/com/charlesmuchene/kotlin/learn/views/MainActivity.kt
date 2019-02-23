@@ -1,5 +1,6 @@
 package com.charlesmuchene.kotlin.learn.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -8,10 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.business.CountryViewModel
 import com.charlesmuchene.kotlin.learn.models.Country
-import com.charlesmuchene.kotlin.learn.utilities.INTERNET_PERMISSION_REQUEST_CODE
-import com.charlesmuchene.kotlin.learn.utilities.hide
-import com.charlesmuchene.kotlin.learn.utilities.permissions
-import com.charlesmuchene.kotlin.learn.utilities.show
+import com.charlesmuchene.kotlin.learn.utilities.*
 import com.charlesmuchene.kotlin.learn.views.recyclerview.CountryAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -117,7 +115,10 @@ class MainActivity : AppCompatActivity() {
      * @param country [Country] instance
      */
     private fun countryClicked(country: Country) {
-        
+        val detailsIntent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra(COUNTRY_PARCEL, country)
+        }
+        startActivity(detailsIntent)
     }
 
 }

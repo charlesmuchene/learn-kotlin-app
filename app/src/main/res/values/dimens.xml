@@ -8,6 +8,7 @@
     <dimen name="quarter_default_margin">4dp</dimen>
 
     <!-- Font sizes -->
+    <dimen name="title_size">24sp</dimen>
     <dimen name="country_name_size">20sp</dimen>
     <dimen name="country_capital_size">18sp</dimen>
 </resources>

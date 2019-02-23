@@ -10,6 +10,7 @@ import com.bumptech.glide.RequestBuilder
 import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.OnItemClickListener
+import com.charlesmuchene.kotlin.learn.utilities.orDash
 import com.charlesmuchene.kotlin.learn.utilities.svg.SvgSoftwareLayerSetter
 
 /**
@@ -40,10 +41,12 @@ class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(imageView)
 
         with(itemView) {
-            findViewById<TextView>(R.id.nameTextView).text = country.name
-            findViewById<TextView>(R.id.capitalTextView).text = country.capital
-            findViewById<TextView>(R.id.regionTextView).text =
-                String.format("%s, %s", country.region, country.subregion)
+            with(country) {
+                findViewById<TextView>(R.id.nameTextView).text = name
+                findViewById<TextView>(R.id.capitalTextView).text = capital.orDash
+                findViewById<TextView>(R.id.regionTextView).text =
+                    arrayOf(region, subregion).filterNot { it.isEmpty() }.joinToString()
+            }
         }
 
         itemView.setOnClickListener { listener?.invoke(country) }

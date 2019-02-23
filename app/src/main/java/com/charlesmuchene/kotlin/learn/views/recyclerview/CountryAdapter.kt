@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.OnItemClickListener
+import com.charlesmuchene.kotlin.learn.utilities.promote
 
 /**
  * Country Adapter
@@ -33,6 +34,7 @@ class CountryAdapter : RecyclerView.Adapter<CountryViewHolder>() {
     fun setCountries(countries: List<Country>) {
         this.countries.clear()
         this.countries.addAll(countries)
+        this.countries.promote()
         notifyDataSetChanged()
     }
 
