@@ -4,11 +4,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.business.CountryViewModel
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.INTERNET_PERMISSION_REQUEST_CODE
+import com.charlesmuchene.kotlin.learn.utilities.hide
 import com.charlesmuchene.kotlin.learn.utilities.permissions
+import com.charlesmuchene.kotlin.learn.utilities.show
+import com.charlesmuchene.kotlin.learn.views.recyclerview.CountryAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -17,12 +21,26 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CountryViewModel
+    private var countryAdapter = CountryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
+        setupActivity()
         internetPermissionGranted()
+    }
+
+    private fun setupActivity() {
+
+        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
+
+        with(recyclerView) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = countryAdapter
+        }
+
+        countryAdapter.setItemListener(::countryClicked)
+
     }
 
     override fun onDestroy() {
@@ -72,10 +90,7 @@ class MainActivity : AppCompatActivity() {
      * @param countries [List]
      */
     private fun displayCountries(countries: List<Country>) {
-        // Process elements
-        for (country in countries) {
-            Timber.e(country.capital)
-        }
+        countryAdapter.setCountries(countries)
         recyclerView.show()
         hideLoadingBar()
     }
@@ -84,8 +99,9 @@ class MainActivity : AppCompatActivity() {
      * Show error loading countries
      */
     private fun showErrorLoadingCountries() {
+        recyclerView.hide()
         hideLoadingBar()
-        waitAnimationView.show()
+        errorView.show()
     }
 
     /**
@@ -93,6 +109,15 @@ class MainActivity : AppCompatActivity() {
      */
     private fun hideLoadingBar() {
         loadingAnimationView.hide()
+    }
+
+    /**
+     * Handle country click
+     *
+     * @param country [Country] instance
+     */
+    private fun countryClicked(country: Country) {
+        
     }
 
 }
