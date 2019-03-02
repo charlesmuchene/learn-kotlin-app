@@ -1,4 +1,4 @@
-package com.charlesmuchene.kotlin.learn.business
+package com.charlesmuchene.kotlin.learn.data
 
 sealed class ApiResponse
 

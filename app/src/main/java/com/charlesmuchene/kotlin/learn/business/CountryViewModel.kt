@@ -2,6 +2,8 @@ package com.charlesmuchene.kotlin.learn.business
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.charlesmuchene.kotlin.learn.data.Failure
+import com.charlesmuchene.kotlin.learn.data.Success
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.Configuration
 import io.reactivex.android.schedulers.AndroidSchedulers
