@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupActivity()
-        internetPermissionGranted()
+        verifyInternetPermissionGranted()
     }
 
     private fun setupActivity() {
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
      * Method invoked when internet permission is granted
      */
     @AfterPermissionGranted(INTERNET_PERMISSION_REQUEST_CODE)
-    private fun internetPermissionGranted() {
+    private fun verifyInternetPermissionGranted() {
         if (EasyPermissions.hasPermissions(this, *permissions)) fetchCountries()
         else EasyPermissions.requestPermissions(
             this,
