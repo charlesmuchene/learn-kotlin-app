@@ -15,21 +15,6 @@ data class Country(
 ) :
     Parcelable {
 
-    val details: String
-        get() = """
-            Native Name: $nativeName
-
-            Demonym: ${demonym.orDash}
-
-            Population: ${String.format("%,d", population)}
-
-            Language(s): ${languages.joinToString(transform = Language::toString)}
-
-            Currency: ${currencies.joinToString(transform = Currency::toString)}
-
-            Timezone(s): ${timezones.joinToString()}
-        """.trimIndent()
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

@@ -19,3 +19,6 @@ fun View.show() {
 
 val String.orDash
     get() = if (this.isBlank()) "--" else this
+
+val Country.stringifiedRegion: String
+    get() = stringifyArray(arrayOf(region, subregion))

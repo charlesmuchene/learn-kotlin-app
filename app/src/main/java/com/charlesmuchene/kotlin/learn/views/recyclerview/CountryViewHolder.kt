@@ -11,6 +11,7 @@ import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.OnItemClickListener
 import com.charlesmuchene.kotlin.learn.utilities.orDash
+import com.charlesmuchene.kotlin.learn.utilities.stringifiedRegion
 import com.charlesmuchene.kotlin.learn.utilities.svg.SvgSoftwareLayerSetter
 
 /**
@@ -44,8 +45,7 @@ class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             with(country) {
                 findViewById<TextView>(R.id.nameTextView).text = name
                 findViewById<TextView>(R.id.capitalTextView).text = capital.orDash
-                findViewById<TextView>(R.id.regionTextView).text =
-                    arrayOf(region, subregion).filterNot { it.isEmpty() }.joinToString()
+                findViewById<TextView>(R.id.regionTextView).text = stringifiedRegion
             }
         }
 
