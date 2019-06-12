@@ -2,6 +2,7 @@ package com.charlesmuchene.kotlin.learn.models
 
 import android.os.Parcelable
 import com.charlesmuchene.kotlin.learn.utilities.orDash
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -9,9 +10,17 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Country(
-    val name: String, val capital: String, val region: String, val subregion: String, val flag: String,
-    val nativeName: String, val population: Int, val demonym: String, val timezones: Array<String>,
-    val currencies: Array<Currency>, val languages: Array<Language>
+    @SerializedName("name") val name: String,
+    @SerializedName("capital") val capital: String,
+    @SerializedName("region") val region: String,
+    @SerializedName("subregion") val subregion: String,
+    @SerializedName("flag") val flag: String,
+    @SerializedName("nativeName") val nativeName: String,
+    @SerializedName("population") val population: Int,
+    @SerializedName("demonym") val demonym: String,
+    @SerializedName("timezones") val timezones: Array<String>,
+    @SerializedName("currencies") val currencies: Array<Currency>,
+    @SerializedName("languages") val languages: Array<Language>
 ) :
     Parcelable {
 
