@@ -16,7 +16,6 @@ import com.charlesmuchene.kotlin.learn.utilities.show
 import com.charlesmuchene.kotlin.learn.utilities.stringifiedRegion
 import com.charlesmuchene.kotlin.learn.utilities.svg.SvgSoftwareLayerSetter
 import kotlinx.android.synthetic.main.activity_details.*
-import timber.log.Timber
 
 /**
  * Country details activity
@@ -39,7 +38,7 @@ class DetailsActivity : AppCompatActivity() {
         detailsViewModel = ViewModelProviders.of(this).get(CountryDetailsViewModel::class.java)
 
         val country = intent.getParcelableExtra<Parcelable>(COUNTRY_PARCEL) as? Country
-        country?.let(::displayCountry) ?: kotlin.run { errorView.show() }
+        country?.let(::displayCountry) ?: run { errorView.show() }
         country?.name?.let(::setTitle)
 
     }
