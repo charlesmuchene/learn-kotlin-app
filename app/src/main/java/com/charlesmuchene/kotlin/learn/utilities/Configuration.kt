@@ -11,7 +11,7 @@ object Configuration {
 
     val apiService: ApiService
         get() = Retrofit.Builder()
-            .baseUrl("https://restcountries.eu/rest/v2/")
+            .baseUrl(API_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
