@@ -54,3 +54,13 @@
 -keep public class * extends androidx.recyclerview.widget.RecyclerView$LayoutManager {
     public <init>(...);
 }
+
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keep,includedescriptorclasses class com.charlesmuchene.kotlin.learn.**$$serializer { *; }
+-keepclassmembers class com.charlesmuchene.kotlin.learn.** {
+    *** Companion;
+}
+-keepclasseswithmembers class com.charlesmuchene.kotlin.learn.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}

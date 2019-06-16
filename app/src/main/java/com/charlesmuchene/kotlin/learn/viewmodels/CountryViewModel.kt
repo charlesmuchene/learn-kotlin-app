@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.charlesmuchene.kotlin.learn.data.Failure
 import com.charlesmuchene.kotlin.learn.data.Success
+import com.charlesmuchene.kotlin.learn.db.CountryDao
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.Configuration
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -61,6 +62,16 @@ class CountryViewModel : ViewModel() {
      */
     private fun reportSuccessLoadingCountries(countries: List<Country>) {
         countrySuccess.value = Success(countries)
+    }
+
+    /**
+     * Persist the given countries
+     *
+     * @param dao [CountryDao] instance
+     * @param countries [List][Country] instance
+     */
+    fun persistCountries(dao: CountryDao, countries: List<Country>) {
+        dao.insertAll()
     }
 
     /**
