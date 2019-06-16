@@ -1,48 +1,52 @@
-package com.charlesmuchene.kotlin.learn.business
+package com.charlesmuchene.kotlin.learn.viewmodels
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.charlesmuchene.kotlin.learn.data.Failure
 import com.charlesmuchene.kotlin.learn.data.Success
-import com.charlesmuchene.kotlin.learn.db.CountryDao
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.Configuration
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Country view model
  */
-class CountryViewModel : ViewModel() {
+class CountryViewModel : ScopedViewModel() {
 
     val countryFailure = MutableLiveData<Failure>()
     val countrySuccess = MutableLiveData<Success<List<Country>>>()
 
-    private val disposeBag = CompositeDisposable()
-
     /**
-     * Fetch all countries from api
+     * Fetch all countries from db or api
      */
-    fun fetchAllCountries() {
-        val subscribe = Configuration.apiService.getAllCountries()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::handleCountriesResponse)
-        disposeBag.add(subscribe)
+    fun fetchCountries() {
+
+        launch(Dispatchers.IO) {
+            val countries = Configuration.db.countryDao().getAllAsync()
+            if (countries.isEmpty()) fetchCountriesFromApi()
+            else withContext(Dispatchers.Main) {
+                reportSuccessLoadingCountries(countries)
+            }
+        }
+
     }
 
     /**
-     * Handle country fetch response
-     *
-     * @param response [Response] instance
-     * @param throwable [Throwable] instance
+     * Fetch countries from api
      */
-    private fun handleCountriesResponse(response: Response<List<Country>>?, throwable: Throwable?) {
-        if (throwable != null) {
-            reportErrorLoadingCountries(throwable)
-        } else if (response != null) {
-            response.body()?.let(::reportSuccessLoadingCountries)
-                ?: reportErrorLoadingCountries(Throwable("Error loading countries"))
+    private suspend fun fetchCountriesFromApi() {
+        try {
+            val list = Configuration.apiService.getCountries().body()
+            list?.let(Configuration.db.countryDao()::insertAll)
+            withContext(Dispatchers.Main) {
+                list?.let(::reportSuccessLoadingCountries)
+                    ?: reportErrorLoadingCountries(Throwable("Error loading countries"))
+            }
+        } catch (t: Throwable) {
+            withContext(Dispatchers.Main) {
+                reportErrorLoadingCountries(t)
+            }
         }
     }
 
@@ -62,22 +66,5 @@ class CountryViewModel : ViewModel() {
      */
     private fun reportSuccessLoadingCountries(countries: List<Country>) {
         countrySuccess.value = Success(countries)
-    }
-
-    /**
-     * Persist the given countries
-     *
-     * @param dao [CountryDao] instance
-     * @param countries [List][Country] instance
-     */
-    fun persistCountries(dao: CountryDao, countries: List<Country>) {
-        dao.insertAll()
-    }
-
-    /**
-     * Clean up RX subscriptions
-     */
-    fun cleanUp() {
-        disposeBag.dispose()
     }
 }

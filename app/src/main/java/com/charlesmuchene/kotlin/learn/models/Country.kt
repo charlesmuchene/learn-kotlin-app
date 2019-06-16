@@ -1,16 +1,21 @@
 package com.charlesmuchene.kotlin.learn.models
 
 import android.os.Parcelable
-import com.charlesmuchene.kotlin.learn.utilities.orDash
+import androidx.room.*
+import com.charlesmuchene.kotlin.learn.db.converters.CurrencyArrayConverter
+import com.charlesmuchene.kotlin.learn.db.converters.LanguageArrayConverter
+import com.charlesmuchene.kotlin.learn.db.converters.StringArrayConverter
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Country class
  */
+@Entity
 @Parcelize
+@TypeConverters(StringArrayConverter::class, CurrencyArrayConverter::class, LanguageArrayConverter::class)
 data class Country(
-    @SerializedName("name") val name: String,
+    @SerializedName("name") @PrimaryKey val name: String,
     @SerializedName("capital") val capital: String,
     @SerializedName("region") val region: String,
     @SerializedName("subregion") val subregion: String,

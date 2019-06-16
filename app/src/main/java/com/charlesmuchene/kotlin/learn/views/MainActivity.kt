@@ -7,9 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.charlesmuchene.kotlin.learn.R
-import com.charlesmuchene.kotlin.learn.business.CountryViewModel
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.*
+import com.charlesmuchene.kotlin.learn.viewmodels.CountryViewModel
 import com.charlesmuchene.kotlin.learn.views.recyclerview.CountryAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -41,11 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.cleanUp()
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
@@ -70,8 +65,6 @@ class MainActivity : AppCompatActivity() {
      */
     private fun fetchCountries() {
 
-        viewModel.fetchAllCountries()
-
         viewModel.countryFailure.observe(this, Observer { failure ->
             Timber.e(failure.throwable)
             showErrorLoadingCountries()
@@ -80,6 +73,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.countrySuccess.observe(this, Observer { success ->
             displayCountries(success.data)
         })
+
+        viewModel.fetchCountries()
     }
 
     /**

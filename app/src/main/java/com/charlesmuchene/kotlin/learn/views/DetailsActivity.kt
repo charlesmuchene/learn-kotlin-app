@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.charlesmuchene.kotlin.learn.R
-import com.charlesmuchene.kotlin.learn.business.CountryDetailsViewModel
+import com.charlesmuchene.kotlin.learn.viewmodels.CountryDetailsViewModel
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.COUNTRY_PARCEL
 import com.charlesmuchene.kotlin.learn.utilities.orDash

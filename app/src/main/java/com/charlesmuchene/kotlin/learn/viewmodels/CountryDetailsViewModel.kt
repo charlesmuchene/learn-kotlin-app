@@ -1,4 +1,4 @@
-package com.charlesmuchene.kotlin.learn.business
+package com.charlesmuchene.kotlin.learn.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.charlesmuchene.kotlin.learn.models.Country
