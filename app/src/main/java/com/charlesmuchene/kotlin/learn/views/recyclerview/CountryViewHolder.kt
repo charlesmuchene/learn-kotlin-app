@@ -42,14 +42,11 @@ class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(imageView)
 
         with(itemView) {
-            with(country) {
-                findViewById<TextView>(R.id.nameTextView).text = name
-                findViewById<TextView>(R.id.capitalTextView).text = capital.orDash
-                findViewById<TextView>(R.id.regionTextView).text = stringifiedRegion
-            }
+            findViewById<TextView>(R.id.nameTextView).text = country.name
+            findViewById<TextView>(R.id.capitalTextView).text = country.capital.orDash
+            findViewById<TextView>(R.id.regionTextView).text = country.stringifiedRegion
+            setOnClickListener { listener?.invoke(country) }
         }
-
-        itemView.setOnClickListener { listener?.invoke(country) }
 
     }
 }

@@ -10,7 +10,7 @@ import com.charlesmuchene.kotlin.learn.models.Country
 interface CountryDao {
 
     @Query("SELECT * FROM country")
-    fun getAllAsync(): List<Country>
+    fun getAll(): List<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(countries: List<Country>)

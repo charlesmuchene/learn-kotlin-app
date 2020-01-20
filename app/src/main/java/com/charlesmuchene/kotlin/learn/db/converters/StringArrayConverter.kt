@@ -10,7 +10,7 @@ import kotlinx.serialization.serializer
  *
  * String array converter
  *
- * This class is hacky!! Please fix it.
+ * TODO: This class is hacky!! Please fix it.
  *
  */
 class StringArrayConverter {

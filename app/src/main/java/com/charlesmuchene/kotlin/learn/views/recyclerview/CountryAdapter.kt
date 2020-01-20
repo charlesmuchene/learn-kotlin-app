@@ -10,20 +10,10 @@ import com.charlesmuchene.kotlin.learn.utilities.OnItemClickListener
 /**
  * Country Adapter
  */
-class CountryAdapter : RecyclerView.Adapter<CountryViewHolder>() {
+class CountryAdapter(private val listener: OnItemClickListener<Country>) :
+    RecyclerView.Adapter<CountryViewHolder>() {
 
     private val countries = mutableListOf<Country>()
-
-    private var listener: OnItemClickListener<Country>? = null
-
-    /**
-     * Set on item click listener to the given listener
-     *
-     * @param listener [OnItemClickListener] instance
-     */
-    fun setItemListener(listener: OnItemClickListener<Country>) {
-        this.listener = listener
-    }
 
     /**
      * Set countries

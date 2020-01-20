@@ -1,5 +1,6 @@
 package com.charlesmuchene.kotlin.learn.viewmodels
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import com.charlesmuchene.kotlin.learn.data.Failure
 import com.charlesmuchene.kotlin.learn.data.Success
@@ -7,7 +8,6 @@ import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.Configuration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Country view model
@@ -22,12 +22,10 @@ class CountryViewModel : ScopedViewModel() {
      */
     fun fetchCountries() {
 
-        launch(Dispatchers.IO) {
-            val countries = Configuration.db.countryDao().getAllAsync()
+        launch(job + Dispatchers.IO) {
+            val countries = Configuration.db.countryDao().getAll()
             if (countries.isEmpty()) fetchCountriesFromApi()
-            else withContext(Dispatchers.Main) {
-                reportSuccessLoadingCountries(countries)
-            }
+            else reportSuccessLoadingCountries(countries)
         }
 
     }
@@ -37,34 +35,35 @@ class CountryViewModel : ScopedViewModel() {
      */
     private suspend fun fetchCountriesFromApi() {
         try {
-            val list = Configuration.apiService.getCountries().body()
-            list?.let(Configuration.db.countryDao()::insertAll)
-            withContext(Dispatchers.Main) {
-                list?.let(::reportSuccessLoadingCountries)
-                    ?: reportErrorLoadingCountries(Throwable("Error loading countries"))
+            val listOfCountries = Configuration.apiService.getCountries().body()
+            if (listOfCountries != null) {
+                Configuration.db.countryDao().insertAll(listOfCountries)
+                reportSuccessLoadingCountries(listOfCountries)
+            } else {
+                reportErrorLoadingCountries(Throwable("Error loading countries"))
             }
         } catch (t: Throwable) {
-            withContext(Dispatchers.Main) {
-                reportErrorLoadingCountries(t)
-            }
+            reportErrorLoadingCountries(t)
         }
     }
 
     /**
-     * Report error during fetch
+     * Report error after countries fetch
      *
      * @param throwable [Throwable] instance
      */
+    @WorkerThread
     private fun reportErrorLoadingCountries(throwable: Throwable) {
-        countryFailure.value = Failure(throwable)
+        countryFailure.postValue(Failure(throwable))
     }
 
     /**
-     * Report success during load
+     * Report success after countries fetch
      *
-     * @param countries [List]
+     * @param countries [List] of countries
      */
+    @WorkerThread
     private fun reportSuccessLoadingCountries(countries: List<Country>) {
-        countrySuccess.value = Success(countries)
+        countrySuccess.postValue(Success(countries))
     }
 }

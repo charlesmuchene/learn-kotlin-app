@@ -19,7 +19,7 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CountryViewModel
-    private var countryAdapter = CountryAdapter()
+    private lateinit var countryAdapter: CountryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,19 +29,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupActivity() {
-
         viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
+        countryAdapter = CountryAdapter(::countryClicked)
 
-        with(recyclerView) {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = countryAdapter
-        }
-
-        countryAdapter.setItemListener(::countryClicked)
-
+        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        recyclerView.adapter = countryAdapter
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }

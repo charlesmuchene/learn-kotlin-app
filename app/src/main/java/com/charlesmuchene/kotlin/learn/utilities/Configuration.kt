@@ -1,6 +1,6 @@
 package com.charlesmuchene.kotlin.learn.utilities
 
-import android.content.Context
+import android.app.Application
 import androidx.room.Room
 import com.charlesmuchene.kotlin.learn.data.ApiService
 import com.charlesmuchene.kotlin.learn.db.Database
@@ -8,7 +8,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
+/**
+ * Configuration class
+ */
 object Configuration {
+
+    private lateinit var application: Application
 
     val apiService: ApiService
         get() = Retrofit.Builder()
@@ -17,12 +22,18 @@ object Configuration {
             .build()
             .create(ApiService::class.java)
 
-    lateinit var db: Database
-        private set
+    val db by lazy {
+        Room.databaseBuilder(application, Database::class.java, DATABASE_NAME).build()
+    }
 
-    fun initialize(context: Context) {
+    /**
+     * Initialize configuration
+     *
+     * @param application [Application] instance
+     */
+    fun initialize(application: Application) {
         Timber.plant(Timber.DebugTree())
-        db = Room.databaseBuilder(context, Database::class.java, DATABASE_NAME).build()
+        this.application = application
     }
 
 }
