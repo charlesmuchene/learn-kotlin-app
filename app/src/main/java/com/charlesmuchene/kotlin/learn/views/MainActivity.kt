@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.charlesmuchene.kotlin.learn.R
+import com.charlesmuchene.kotlin.learn.data.Failure
+import com.charlesmuchene.kotlin.learn.data.Success
 import com.charlesmuchene.kotlin.learn.databinding.ActivityMainBinding
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.*
@@ -63,13 +65,15 @@ class MainActivity : AppCompatActivity() {
      */
     private fun registerObservers() {
 
-        viewModel.countryFailure.observe(this, Observer { failure ->
-            Timber.e(failure.throwable)
-            showErrorLoadingCountries()
-        })
-
-        viewModel.countrySuccess.observe(this, Observer { success ->
-            displayCountries(success.data)
+        viewModel.getCountryLiveData().observe(this, Observer { response ->
+            @Suppress("UNCHECKED_CAST")
+            when (response) {
+                is Failure -> {
+                    Timber.e(response.throwable)
+                    showErrorLoadingCountries()
+                }
+                is Success<*> -> displayCountries(response.data as List<Country>)
+            }
         })
 
     }

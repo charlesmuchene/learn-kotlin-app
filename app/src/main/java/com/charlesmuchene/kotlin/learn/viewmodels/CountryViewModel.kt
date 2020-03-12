@@ -1,7 +1,11 @@
 package com.charlesmuchene.kotlin.learn.viewmodels
 
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.charlesmuchene.kotlin.learn.data.ApiResponse
 import com.charlesmuchene.kotlin.learn.data.Failure
 import com.charlesmuchene.kotlin.learn.data.Success
 import com.charlesmuchene.kotlin.learn.models.Country
@@ -12,22 +16,26 @@ import kotlinx.coroutines.launch
 /**
  * Country view model
  */
-class CountryViewModel : ScopedViewModel() {
+class CountryViewModel : ViewModel() {
 
-    val countryFailure = MutableLiveData<Failure>()
-    val countrySuccess = MutableLiveData<Success<List<Country>>>()
+    private val countryLiveData = MutableLiveData<ApiResponse>()
+
+    /**
+     * Get country live data
+     *
+     * @return [LiveData] instance
+     */
+    fun getCountryLiveData(): LiveData<ApiResponse> = countryLiveData
 
     /**
      * Fetch all countries from db or api
      */
     fun fetchCountries() {
-
-        launch(job + Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val countries = Configuration.db.countryDao().getAll()
             if (countries.isEmpty()) fetchCountriesFromApi()
             else reportSuccessLoadingCountries(countries)
         }
-
     }
 
     /**
@@ -54,7 +62,7 @@ class CountryViewModel : ScopedViewModel() {
      */
     @WorkerThread
     private fun reportErrorLoadingCountries(throwable: Throwable) {
-        countryFailure.postValue(Failure(throwable))
+        countryLiveData.postValue(Failure(throwable))
     }
 
     /**
@@ -64,6 +72,6 @@ class CountryViewModel : ScopedViewModel() {
      */
     @WorkerThread
     private fun reportSuccessLoadingCountries(countries: List<Country>) {
-        countrySuccess.postValue(Success(countries))
+        countryLiveData.postValue(Success(countries))
     }
 }
