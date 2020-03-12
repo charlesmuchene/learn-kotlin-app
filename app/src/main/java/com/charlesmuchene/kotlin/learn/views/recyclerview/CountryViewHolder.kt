@@ -1,25 +1,22 @@
 package com.charlesmuchene.kotlin.learn.views.recyclerview
 
 import android.graphics.drawable.PictureDrawable
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.charlesmuchene.kotlin.learn.R
+import com.charlesmuchene.kotlin.learn.databinding.CountryItemLayoutBinding
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.OnItemClickListener
-import com.charlesmuchene.kotlin.learn.utilities.orDash
-import com.charlesmuchene.kotlin.learn.utilities.stringifiedRegion
 import com.charlesmuchene.kotlin.learn.utilities.svg.SvgSoftwareLayerSetter
 
 /**
  * Country view holder
  *
- * @param itemView [View] layout of item
+ * @param binding [CountryItemLayoutBinding] instance
  */
-class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CountryViewHolder(private val binding: CountryItemLayoutBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     private val requestBuilder: RequestBuilder<PictureDrawable>
         get() = Glide.with(itemView.context)
@@ -32,21 +29,17 @@ class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * Bind the given country to the view
      *
      * @param country [Country] to bind
-     * @param listener Nullable [OnItemClickListener] instance
+     * @param listener [OnItemClickListener] instance
      */
-    fun bind(country: Country, listener: OnItemClickListener<Country>?) {
+    fun bind(country: Country, listener: OnItemClickListener<Country>) {
+        binding.country = country
+        binding.executePendingBindings()
 
-        val imageView = itemView.findViewById<ImageView>(R.id.flagImageView)
         requestBuilder
             .load(country.flag)
-            .into(imageView)
+            .into(binding.flagImageView)
 
-        with(itemView) {
-            findViewById<TextView>(R.id.nameTextView).text = country.name
-            findViewById<TextView>(R.id.capitalTextView).text = country.capital.orDash
-            findViewById<TextView>(R.id.regionTextView).text = country.stringifiedRegion
-            setOnClickListener { listener?.invoke(country) }
-        }
+        binding.root.setOnClickListener { listener.invoke(country) }
 
     }
 }

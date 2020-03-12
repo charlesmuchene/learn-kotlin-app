@@ -2,11 +2,12 @@ package com.charlesmuchene.kotlin.learn.views
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.charlesmuchene.kotlin.learn.R
+import com.charlesmuchene.kotlin.learn.databinding.ActivityMainBinding
 import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.*
 import com.charlesmuchene.kotlin.learn.viewmodels.CountryViewModel
@@ -18,22 +19,19 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CountryViewModel
-    private lateinit var countryAdapter: CountryAdapter
+    private val viewModel: CountryViewModel by viewModels()
+    private val countryAdapter: CountryAdapter by lazy { CountryAdapter(::countryClicked) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setupActivity()
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setupActivity(binding.recyclerView)
         registerObservers()
         verifyInternetPermissionGranted()
     }
 
-    private fun setupActivity() {
-        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
-        countryAdapter = CountryAdapter(::countryClicked)
-
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+    private fun setupActivity(recyclerView: RecyclerView) {
         recyclerView.adapter = countryAdapter
     }
 
@@ -82,7 +80,7 @@ class MainActivity : AppCompatActivity() {
      * @param countries [List]
      */
     private fun displayCountries(countries: List<Country>) {
-        countryAdapter.setCountries(countries)
+        countryAdapter.submitList(countries)
         recyclerView.show()
         hideLoadingBar()
     }

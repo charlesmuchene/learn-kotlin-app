@@ -6,6 +6,7 @@ import com.charlesmuchene.kotlin.learn.utilities.Configuration
 /**
  * App class
  */
+@Suppress("unused")
 class LearnApplication : Application() {
 
     override fun onCreate() {

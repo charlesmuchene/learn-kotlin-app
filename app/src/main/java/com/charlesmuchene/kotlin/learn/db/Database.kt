@@ -7,7 +7,7 @@ import com.charlesmuchene.kotlin.learn.models.Country
 /**
  * App's db
  */
-@Database(entities = [Country::class], version = 1, exportSchema = false)
+@Database(entities = [Country::class], version = 1)
 abstract class Database : RoomDatabase() {
 
     /**

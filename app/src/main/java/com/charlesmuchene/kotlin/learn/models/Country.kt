@@ -5,6 +5,7 @@ import androidx.room.*
 import com.charlesmuchene.kotlin.learn.db.converters.CurrencyArrayConverter
 import com.charlesmuchene.kotlin.learn.db.converters.LanguageArrayConverter
 import com.charlesmuchene.kotlin.learn.db.converters.StringArrayConverter
+import com.charlesmuchene.kotlin.learn.utilities.stringifyArray
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -13,7 +14,11 @@ import kotlinx.android.parcel.Parcelize
  */
 @Entity
 @Parcelize
-@TypeConverters(StringArrayConverter::class, CurrencyArrayConverter::class, LanguageArrayConverter::class)
+@TypeConverters(
+    StringArrayConverter::class,
+    CurrencyArrayConverter::class,
+    LanguageArrayConverter::class
+)
 data class Country(
     @SerializedName("name") @PrimaryKey val name: String,
     @SerializedName("capital") val capital: String,
@@ -28,6 +33,10 @@ data class Country(
     @SerializedName("languages") val languages: Array<Language>
 ) :
     Parcelable {
+
+    fun getCountryCapital() = if (region.isBlank()) "--" else region
+
+    fun getCountryRegion() = stringifyArray(arrayOf(region, subregion))
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,85 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".views.MainActivity">
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+                name="country"
+                type="com.charlesmuchene.kotlin.learn.models.Country" />
+
+        <variable
+                name="viewmodel"
+                type="com.charlesmuchene.kotlin.learn.viewmodels.CountryDetailsViewModel" />
+    </data>
+
+    <ScrollView
+
             android:layout_width="match_parent"
-            android:padding="@dimen/default_margin"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            tools:context=".views.MainActivity">
 
-        <TextView android:layout_width="@dimen/zero_size"
-                  android:id="@+id/nameTextView"
-                  tools:text="Kenya"
-                  android:gravity="center"
-                  android:textSize="@dimen/title_size"
-                  android:textStyle="bold"
-                  app:layout_constraintRight_toRightOf="parent"
-                  app:layout_constraintTop_toTopOf="parent"
-                  app:layout_constraintLeft_toLeftOf="parent"
-                  android:layout_height="wrap_content"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_margin">
 
-        <TextView android:layout_width="@dimen/zero_size"
-                  android:id="@+id/capitalTextView"
-                  tools:text="Nairobi"
-                  android:gravity="center"
-                  android:layout_marginTop="@dimen/half_default_margin"
-                  android:textSize="@dimen/country_capital_size"
-                  app:layout_constraintRight_toRightOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/nameTextView"
-                  app:layout_constraintLeft_toLeftOf="parent"
-                  android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{country.name}"
+                    android:textSize="@dimen/title_size"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Kenya" />
 
-        <TextView android:layout_width="@dimen/zero_size"
-                  android:id="@+id/regionTextView"
-                  tools:text="East Africa"
-                  android:gravity="center"
-                  android:layout_marginTop="@dimen/half_default_margin"
-                  android:textSize="@dimen/country_capital_size"
-                  app:layout_constraintRight_toRightOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/capitalTextView"
-                  app:layout_constraintLeft_toLeftOf="parent"
-                  android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/capitalTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/half_default_margin"
+                    android:gravity="center"
+                    android:text="@{country.countryCapital}"
+                    android:textSize="@dimen/country_capital_size"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+                    tools:text="Nairobi" />
 
-        <ImageView android:layout_width="@dimen/zero_size" android:layout_height="@android:dimen/thumbnail_height"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toRightOf="parent"
-                   android:contentDescription="@string/country_flag"
-                   android:src="@drawable/ic_ken"
-                   android:layout_marginTop="@dimen/default_margin"
-                   app:layout_constraintTop_toBottomOf="@+id/regionTextView"
-                   android:id="@+id/flagImageView"/>
+            <TextView
+                    android:id="@+id/regionTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/half_default_margin"
+                    android:gravity="center"
+                    android:text="@{country.countryRegion}"
+                    android:textSize="@dimen/country_capital_size"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/capitalTextView"
+                    tools:text="East Africa" />
 
-        <TextView android:layout_width="@dimen/zero_size"
-                  android:id="@+id/detailsTextView"
-                  tools:text="Awesome country"
-                  android:layout_marginTop="@dimen/default_margin"
-                  android:textSize="@dimen/title_size"
-                  android:ellipsize="end"
-                  app:layout_constraintRight_toRightOf="parent"
-                  app:layout_constraintTop_toBottomOf="@+id/flagImageView"
-                  app:layout_constraintLeft_toLeftOf="parent"
-                  app:layout_constraintVertical_bias="0"
-                  app:layout_constraintBottom_toBottomOf="parent"
-                  android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/flagImageView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="@android:dimen/thumbnail_height"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:contentDescription="@string/country_flag"
+                    android:src="@drawable/ic_ken"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/regionTextView" />
 
-        <com.airbnb.lottie.LottieAnimationView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:id="@+id/errorView"
-                android:layout_width="@android:dimen/thumbnail_width"
-                android:layout_height="@android:dimen/thumbnail_height"
-                app:lottie_fileName="error.json"
-                app:lottie_loop="true"
-                tools:visibility="visible"
-                android:visibility="gone"
-                app:lottie_autoPlay="true"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                    android:id="@+id/detailsTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:ellipsize="end"
+                    android:text="@{viewmodel.getDetails(country)}"
+                    android:textSize="@dimen/title_size"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/flagImageView"
+                    app:layout_constraintVertical_bias="0"
+                    tools:text="Awesome country" />
 
-</ScrollView>
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/errorView"
+                    android:layout_width="@android:dimen/thumbnail_width"
+                    android:layout_height="@android:dimen/thumbnail_height"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_fileName="error.json"
+                    app:lottie_loop="true"
+                    tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>
