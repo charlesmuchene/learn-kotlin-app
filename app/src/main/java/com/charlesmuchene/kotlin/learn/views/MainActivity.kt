@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupActivity()
+        registerObservers()
         verifyInternetPermissionGranted()
     }
 
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
      */
     @AfterPermissionGranted(INTERNET_PERMISSION_REQUEST_CODE)
     private fun verifyInternetPermissionGranted() {
-        if (EasyPermissions.hasPermissions(this, *permissions)) fetchCountries()
+        if (EasyPermissions.hasPermissions(this, *permissions)) viewModel.fetchCountries()
         else EasyPermissions.requestPermissions(
             this,
             getString(R.string.permissions_rationale),
@@ -60,9 +61,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Fetch countries
+     * Register countries Observers
      */
-    private fun fetchCountries() {
+    private fun registerObservers() {
 
         viewModel.countryFailure.observe(this, Observer { failure ->
             Timber.e(failure.throwable)
@@ -73,7 +74,6 @@ class MainActivity : AppCompatActivity() {
             displayCountries(success.data)
         })
 
-        viewModel.fetchCountries()
     }
 
     /**
