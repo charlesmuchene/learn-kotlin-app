@@ -2,6 +2,7 @@ package com.charlesmuchene.kotlin.learn.db.converters
 
 import androidx.room.TypeConverter
 import com.charlesmuchene.kotlin.learn.models.Language
+import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.list
