@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
 import com.charlesmuchene.kotlin.learn.R
 import com.charlesmuchene.kotlin.learn.data.Failure
 import com.charlesmuchene.kotlin.learn.data.Success
@@ -14,7 +13,6 @@ import com.charlesmuchene.kotlin.learn.models.Country
 import com.charlesmuchene.kotlin.learn.utilities.*
 import com.charlesmuchene.kotlin.learn.viewmodels.CountryViewModel
 import com.charlesmuchene.kotlin.learn.views.recyclerview.CountryAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
@@ -23,18 +21,18 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: CountryViewModel by viewModels()
     private val countryAdapter: CountryAdapter by lazy { CountryAdapter(::countryClicked) }
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupActivity(binding.recyclerView)
+        setupActivity()
         registerObservers()
         verifyInternetPermissionGranted()
     }
 
-    private fun setupActivity(recyclerView: RecyclerView) {
-        recyclerView.adapter = countryAdapter
+    private fun setupActivity() {
+        binding.recyclerView.adapter = countryAdapter
     }
 
     override fun onRequestPermissionsResult(
@@ -85,7 +83,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun displayCountries(countries: List<Country>) {
         countryAdapter.submitList(countries)
-        recyclerView.show()
+        binding.recyclerView.show()
         hideLoadingBar()
     }
 
@@ -93,16 +91,16 @@ class MainActivity : AppCompatActivity() {
      * Show error loading countries
      */
     private fun showErrorLoadingCountries() {
-        recyclerView.hide()
+        binding.recyclerView.hide()
         hideLoadingBar()
-        errorView.show()
+        binding.errorView.show()
     }
 
     /**
      * Hide loading bar
      */
     private fun hideLoadingBar() {
-        loadingAnimationView.hide()
+        binding.loadingAnimationView.hide()
     }
 
     /**
